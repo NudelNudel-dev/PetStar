@@ -41,7 +41,6 @@ export default function HomePage() {
     }
   };
 
-  // 🌐 실제 Supabase로 데이터를 보내는 최종 승인 핸들러
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -53,7 +52,7 @@ export default function HomePage() {
         },
         body: JSON.stringify({
           ...formData,
-          profileImage: previewImage // 현재는 임시 blob URL 처리 (추후 스토리지 확장 가능)
+          profileImage: previewImage
         }),
       });
 
@@ -63,8 +62,8 @@ export default function HomePage() {
 
       alert(`⭐ 스타 입성 완료! 🐾\n${formData.petName}가 전국 집사들의 마음을 훔치러 출발합니다!`);
       
-      setHasProfile(true); // 프로필 등록 완료 상태 전환 (바텀시트 닫힘)
-      router.push('/feed'); // 피드 페이지로 라우팅 이동
+      setHasProfile(true);
+      router.push('/feed');
     } catch (error) {
       console.error(error);
       alert('데이터베이스 저장 중 오류가 발생했습니다. 다시 시도해 주세요.');
@@ -78,7 +77,7 @@ export default function HomePage() {
   return (
     <div className="w-full min-h-screen bg-gray-50 relative flex flex-col overflow-hidden">
       
-      {/* 배경 레이아웃 (헤더 및 피드 스켈레톤) */}
+      {/* 배경 레이아웃 (피드 스켈레톤) */}
       <header className="w-full h-12 bg-white border-b border-gray-100 px-4 flex items-center justify-between sticky top-0 z-40">
         <span className="font-extrabold text-orange-500 tracking-tight text-lg">PetStar 🐾</span>
         <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-sm">🐶</div>
@@ -91,18 +90,20 @@ export default function HomePage() {
         </div>
       </main>
 
-      {/* 1단계: 로그인 전 */}
+      {/* 1단계: 로그인 전 - 유저 요청 기반 문구 반영 레이어 */}
       {!isLoggedIn && (
         <div className="absolute inset-0 z-50 flex flex-col items-center justify-between p-6 bg-slate-50/95 backdrop-blur-sm">
           <div className="w-full max-w-sm text-center mt-16 space-y-2">
             <h1 className="text-3xl font-extrabold tracking-tight text-orange-500">PetStar 🐾</h1>
-            <p className="text-sm text-slate-500 font-medium">반려동물과 AI 페르소나가 함께하는 특별한 공간</p>
+            {/* 📝 수정 문구 1: 메인 한 줄 카피 변경 완료 */}
+            <p className="text-sm text-slate-500 font-medium">우리집 막내가 월드 스타가 되는 공간</p>
           </div>
 
           <div className="w-full max-w-sm bg-white p-6 rounded-2xl shadow-xl border border-slate-100 space-y-4">
             <div className="text-center pb-2">
               <h2 className="text-lg font-bold text-slate-800">지금 바로 시작해보세요</h2>
-              <p className="text-xs text-slate-400 mt-1">AI 친구들이 당신을 기다리고 있어요</p>
+              {/* 📝 수정 문구 2: 하단 서브 카피 변경 완료 */}
+              <p className="text-xs text-slate-400 mt-1">손에 땀을 쥐는 콘테스트가 기다리고 있어요!</p>
             </div>
 
             <button
@@ -161,44 +162,3 @@ export default function HomePage() {
             <div className="space-y-4">
               <div>
                 <label className="text-xs font-bold text-gray-400 block mb-1">반려동물 이름</label>
-                <input type="text" name="petName" value={formData.petName} onChange={handleChange} required placeholder="예: 뭉치" className="w-full h-11 px-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium" />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="text-xs font-bold text-gray-400 block mb-1">성별</label>
-                  <div className="w-full h-11 bg-gray-50 border border-gray-200 rounded-xl p-1 flex items-center justify-between gap-1">
-                    <button type="button" onClick={() => handleGenderSelect('male')} className={`flex-1 h-full rounded-lg flex items-center justify-center ${formData.gender === 'male' ? 'bg-blue-50 text-blue-600 border border-blue-200/50' : 'text-gray-300'}`}>
-                      남
-                    </button>
-                    <button type="button" onClick={() => handleGenderSelect('female')} className={`flex-1 h-full rounded-lg flex items-center justify-center ${formData.gender === 'female' ? 'bg-fuchsia-50 text-fuchsia-600 border border-fuchsia-200/50' : 'text-gray-300'}`}>
-                      여
-                    </button>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-xs font-bold text-gray-400 block mb-1">나이</label>
-                  <div className="relative flex items-center">
-                    <input type="number" name="age" value={formData.age} onChange={handleChange} required placeholder="예: 2" className="w-full h-11 px-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium pr-8" />
-                    <span className="absolute right-3.5 text-xs font-bold text-gray-400">살</span>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <label className="text-xs font-bold text-gray-400 block mb-1">품종</label>
-                <input type="text" name="breed" value={formData.breed} onChange={handleChange} required placeholder="예: 진돗개" className="w-full h-11 px-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-medium" />
-              </div>
-            </div>
-
-            <button type="submit" className="w-full h-12 bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm rounded-xl shadow-md mt-6">
-              프로필 등록 완료하고 시작하기
-            </button>
-          </form>
-        </div>
-      )}
-
-    </div>
-  );
-}
