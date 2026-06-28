@@ -77,10 +77,10 @@ export default function HomePage() {
   return (
     <div className="w-full min-h-screen bg-gray-50 relative flex flex-col overflow-hidden">
       
-      <header className="w-full h-12 bg-white border-b border-gray-100 px-4 flex items-center justify-between sticky top-0 z-40">
-        <span className="font-extrabold text-orange-500 tracking-tight text-lg">PetStar 🐾</span>
-        <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-sm">🐶</div>
-      </header>
+      {/* 중복 헤더 삭제 완료: 
+        랜딩 페이지인 HomePage에는 로고 헤더를 두지 않아,
+        서비스 레이아웃과의 중복을 방지합니다. 
+      */}
 
       <main className="flex-1 p-4 space-y-4 overflow-y-auto">
         <div className="p-5 bg-white rounded-2xl shadow-sm border border-gray-100">
