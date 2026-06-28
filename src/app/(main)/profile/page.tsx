@@ -14,6 +14,7 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
+  // 데이터 로딩 로직은 동일
   useEffect(() => {
     async function fetchProfile() {
       try {
@@ -31,49 +32,48 @@ export default function ProfilePage() {
     fetchProfile();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="w-full min-h-screen bg-white flex items-center justify-center">
-        <p className="text-sm text-gray-400 animate-pulse">정보를 가져오는 중...</p>
-      </div>
-    );
-  }
+  if (loading) return <div className="p-10 text-center">로딩중...</div>;
 
   return (
     <div className="w-full min-h-screen bg-white pb-20">
       <div className="p-4">
-        {/* 1. 프로필 페이지 전용: 계정 선택 및 관리 UI */}
+        {/* 상단 계정 ID 및 설정 */}
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-1 cursor-pointer hover:opacity-70 transition-opacity">
-            <h1 className="text-xl font-black text-gray-950">
-              {profile ? profile.pet_name : "로그인 정보 없음"}
-            </h1>
+          <div className="flex items-center gap-1 cursor-pointer">
+            <h1 className="text-xl font-black">jinse_seo</h1>
             <span className="text-gray-400 text-sm">▼</span>
           </div>
           <button className="text-xl">⚙️</button>
         </div>
 
-        {/* 2. 게시물/팔로워/팔로잉 통계 영역 */}
-        <div className="grid grid-cols-3 gap-2 text-center py-2 bg-gray-50 rounded-xl mb-6">
-          <div><p className="text-sm font-bold text-gray-900">0</p><p className="text-[10px] text-gray-400 font-bold">게시물</p></div>
-          <div><p className="text-sm font-bold text-gray-900">0</p><p className="text-[10px] text-gray-400 font-bold">팔로워</p></div>
-          <div><p className="text-sm font-bold text-gray-900">0</p><p className="text-[10px] text-gray-400 font-bold">팔로잉</p></div>
+        {/* 통계 (게시물, 팔로워, 팔로잉) */}
+        <div className="flex justify-between px-4 mb-6">
+          <div className="text-center"><p className="font-black text-lg">89</p><p className="text-xs text-gray-500">게시물</p></div>
+          <div className="text-center"><p className="font-black text-lg">478</p><p className="text-xs text-gray-500">팔로워</p></div>
+          <div className="text-center"><p className="font-black text-lg">582</p><p className="text-xs text-gray-500">팔로잉</p></div>
         </div>
 
-        {/* 3. 프로필 이미지 및 상세 정보 */}
-        <div className="flex flex-col items-center justify-center py-4 border-b border-gray-100">
-          <div className="w-24 h-24 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center shadow-inner">
-            <span className="text-3xl">🐶</span>
-          </div>
-          
-          <div className="text-center mt-3 space-y-1">
-            <p className="text-sm font-bold text-gray-800">
-              {profile ? `${profile.breed}` : "품종 미등록"}
-            </p>
-            <p className="text-xs text-gray-400 font-medium">
-              {profile ? `${profile.age}살 · ${profile.gender === 'male' ? '남아 ♂' : '여아 ♀'}` : "상세 정보 없음"}
-            </p>
-          </div>
+        {/* 프로필 이미지 및 반려동물 정보 */}
+        <div className="flex flex-col items-center mb-6">
+          <div className="w-20 h-20 bg-gray-200 rounded-full mb-2"></div>
+          <p className="font-black text-lg">
+            {profile?.pet_name} {profile?.gender === 'male' ? '♂' : '♀'} {profile?.age}살
+          </p>
+          <p className="text-sm text-gray-500">{profile?.breed}</p>
+        </div>
+
+        {/* 탭 영역 (기획안의 아이콘 3개) */}
+        <div className="flex justify-around border-y border-gray-100 py-2 mb-2">
+          <span>🖼️</span><span>📑</span><span>🏆</span>
+        </div>
+
+        {/* 사진 그리드 (3x3) */}
+        <div className="grid grid-cols-3 gap-1">
+          {[...Array(9)].map((_, i) => (
+            <div key={i} className="aspect-square bg-gray-100 flex items-center justify-center text-xs text-gray-400">
+              Image {i + 1}
+            </div>
+          ))}
         </div>
       </div>
     </div>
